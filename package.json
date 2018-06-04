@@ -1,0 +1,27 @@
+{
+  "name": "THE-F2E-Week-1",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "lint": "eslint ./*.js ./*.html"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/littlehorseboy/THE-F2E-Week-1.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/littlehorseboy/THE-F2E-Week-1/issues"
+  },
+  "homepage": "https://github.com/littlehorseboy/THE-F2E-Week-1#readme",
+  "devDependencies": {
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-html": "^4.0.3",
+    "eslint-plugin-import": "^2.12.0"
+  }
+}
