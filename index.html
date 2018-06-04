@@ -6,28 +6,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <title></title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.3.1/dist/semantic.min.css">
-  <style>
-    #todoListBody .ui.pointing.secondary.menu > a {
-      color: white;
-      border-color: #00408B;
-    }
+  <link rel="stylesheet" href="index.css">
 
-    #todoListBody .ui.card {
-      width: auto;
-    }
-
-    #todoListBody .ui.card {
-      margin-top: 0;
-    }
-
-    #todoListBody .ui.card>.extra {
-      padding: 0;
-    }
-
-    #todoListBody .raisedShadow {
-      box-shadow: 0 2px 4px 0 rgba(34,36,38,.12), 0 2px 10px 0 rgba(34,36,38,.15);
-    }
-  </style>
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <!-- <script src="https://cdn.jsdelivr.net/npm/vue"></script> -->
 </head>
 
 <body id="todoListBody">
@@ -46,37 +28,40 @@
   <div class="ui fluid container">
     <div class="ui tab text container active" data-tab="myTasks">
       <!-- 新增欄位 -->
-      <div class="ui left icon input" style="margin: 1em 0;">
+      <div class="ui fluid left icon input" style="margin: 1em 0;">
         <input type="text" placeholder="Add Task">
         <i class="plus icon"></i>
       </div>
       <!-- end 新增欄位 -->
       <!-- 新增的詳細欄位 -->
-      <div class="ui card raisedShadow">
+      <div class="ui card raisedShadow" style="background-color: #F2F2F2">
         <div class="content">
-          <div class="header">
+          <div class="header" style="display: flex; justify-content: space-between; align-items: center;">
             <!-- 標題 -->
-            <div class="ui checkbox">
-              <input type="checkbox">
-              <label></label>
+            <div>
+              <div class="ui checkbox">
+                <input type="checkbox">
+                <label></label>
+              </div>
+
+              <div class="ui transparent input">
+                <input placeholder="Type Something Here...">
+              </div>
             </div>
+            <div>
+              <button class="ui icon button" style="background-color: transparent;">
+                <i class="star outline icon"></i>
+              </button>
 
-            <div class="ui transparent input">
-              <input placeholder="Type Something Here...">
+              <button class="ui icon button" style="background-color: transparent;">
+                <i class="pencil alternate icon"></i>
+              </button>
             </div>
-
-            <button class="ui icon button">
-              <i class="star outline icon"></i>
-            </button>
-
-            <button class="ui icon button">
-              <i class="pencil alternate icon"></i>
-            </button>
             <!-- end 標題 -->
           </div>
         </div>
-        <div class="content">
-          <div class="ui form">
+        <div class="content" style="display: flex; justify-content: center;">
+          <div class="ui form" style="width: 500px;">
             <div class="field">
               <label>
                 <i class="calendar alternate outline icon"></i>
@@ -90,7 +75,10 @@
                 <i class="file outline icon"></i>
                 File
               </label>
-              <input type="file">
+              <label for="file" class="ui icon button" style="display: inline-block;">
+                <i class="plus icon"></i>
+              </label>
+              <input type="file" id="file" style="display: none;">
             </div>
 
             <div class="field">
@@ -98,46 +86,50 @@
                 <i class="comment alternate outline icon"></i>
                 Comment
               </label>
-              <textarea placeholder="Type your memo here..."></textarea>
+              <textarea rows="5" placeholder="Type your memo here..."></textarea>
             </div>
           </div>
         </div>
-        <div class="extra content">
+        <div class="content" style="padding: 0; border: 1px solid rgba(34,36,38,.1);">
           <div class="ui two bottom attached buttons">
-            <div class="ui button">
+            <button class="ui button cancelBtn">
               <i class="times icon"></i>
               Cancel
-            </div>
-            <div class="ui button">
+            </button>
+            <button class="ui button keepBtn">
               <i class="plus icon"></i>
               Add Task
-            </div>
+            </button>
           </div>
         </div>
       </div>
       <!-- end 新增的詳細欄位 -->
 
       <!-- 檢視與編輯欄位 -->
-      <div class="ui card raisedShadow">
+      <div class="ui card raisedShadow" style="background-color: #F2F2F2">
         <div class="content">
-          <div class="header">
+          <div class="header" style="display: flex; justify-content: space-between; align-items: center;">
             <!-- 標題 -->
-            <div class="ui checkbox">
-              <input type="checkbox">
-              <label></label>
+            <div>
+              <div class="ui checkbox">
+                <input type="checkbox">
+                <label></label>
+              </div>
+              代辦事項第一項
             </div>
       
-            代辦事項第一項
-      
-            <button class="ui icon button">
-              <i class="star outline icon"></i>
-            </button>
-      
-            <button class="ui icon button">
-              <i class="pencil alternate icon"></i>
-            </button>
+            <div>
+              <button class="ui icon button" style="background-color: transparent;">
+                <i class="star outline icon"></i>
+              </button>
+        
+              <button class="ui icon button" style="background-color: transparent;">
+                <i class="pencil alternate icon"></i>
+              </button>
+            </div>
             <!-- end 標題 -->
           </div>
+          <span style="margin: 0 1rem;"></span>
           <i class="calendar alternate outline icon"></i>
           <i class="file outline icon"></i>
           <i class="comment alternate outline icon"></i>
@@ -145,31 +137,40 @@
       </div>
       <!-- end 檢視與編輯欄位 -->
       <!-- 檢視與編輯的詳細欄位 -->
-      <div class="ui card raisedShadow">
+      <div class="ui fluid left icon input" style="margin: 1em 0;">
+        <input type="text" placeholder="Add Task">
+        <i class="plus icon"></i>
+      </div>
+      <!-- end 新增欄位 -->
+      <!-- 新增的詳細欄位 -->
+      <div class="ui card raisedShadow" style="background-color: #F2F2F2">
         <div class="content">
-          <div class="header">
+          <div class="header" style="display: flex; justify-content: space-between; align-items: center;">
             <!-- 標題 -->
-            <div class="ui checkbox">
-              <input type="checkbox">
-              <label></label>
+            <div>
+              <div class="ui checkbox">
+                <input type="checkbox">
+                <label></label>
+              </div>
+
+              <div class="ui transparent input">
+                <input placeholder="Type Something Here...">
+              </div>
             </div>
-      
-            <div class="ui transparent input">
-              <input placeholder="Type Something Here...">
+            <div>
+              <button class="ui icon button" style="background-color: transparent;">
+                <i class="star outline icon"></i>
+              </button>
+
+              <button class="ui icon button" style="background-color: transparent;">
+                <i class="pencil alternate icon"></i>
+              </button>
             </div>
-      
-            <button class="ui icon button">
-              <i class="star outline icon"></i>
-            </button>
-      
-            <button class="ui icon button">
-              <i class="pencil alternate icon"></i>
-            </button>
             <!-- end 標題 -->
           </div>
         </div>
-        <div class="content">
-          <div class="ui form">
+        <div class="content" style="display: flex; justify-content: center;">
+          <div class="ui form" style="width: 500px;">
             <div class="field">
               <label>
                 <i class="calendar alternate outline icon"></i>
@@ -177,34 +178,37 @@
               </label>
               <input placeholder="YYYY/MM/DD hh:mm">
             </div>
-      
+
             <div class="field">
               <label>
                 <i class="file outline icon"></i>
                 File
               </label>
-              <input type="file">
+              <label for="file" class="ui icon button" style="display: inline-block;">
+                <i class="plus icon"></i>
+              </label>
+              <input type="file" id="file" style="display: none;">
             </div>
-      
+
             <div class="field">
               <label>
                 <i class="comment alternate outline icon"></i>
                 Comment
               </label>
-              <textarea placeholder="Type your memo here..."></textarea>
+              <textarea rows="5" placeholder="Type your memo here..."></textarea>
             </div>
           </div>
         </div>
-        <div class="extra content">
+        <div class="content" style="padding: 0; border: 1px solid rgba(34,36,38,.1);">
           <div class="ui two bottom attached buttons">
-            <div class="ui button">
+            <button class="ui button cancelBtn">
               <i class="times icon"></i>
               Cancel
-            </div>
-            <div class="ui button">
+            </button>
+            <button class="ui button keepBtn">
               <i class="plus icon"></i>
               Add Task
-            </div>
+            </button>
           </div>
         </div>
       </div>
