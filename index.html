@@ -19,8 +19,8 @@
       <div class="ui text container">
         <!-- tab menu -->
         <div class="ui pointing secondary menu">
-          <a @click="tab = 'MyTasks'" :class="{ active: tab === 'MyTasks' }" class="item" >My Tasks</a>
-          <a @click="tab = 'InProgress'" :class="{ active: tab === 'InProgress' }" class="item" >In Progress</a>
+          <a @click="tab = 'MyTasks'" :class="{ active: tab === 'MyTasks' }" class="item">My Tasks</a>
+          <a @click="tab = 'InProgress'" :class="{ active: tab === 'InProgress' }" class="item">In Progress</a>
           <a @click="tab = 'Completed'" :class="{ active: tab === 'Completed' }" class="item">Completed</a>
         </div>
         <!-- end tab menu -->
@@ -42,17 +42,21 @@
               <!-- 標題 -->
               <div>
                 <div class="ui checkbox">
-                  <input type="checkbox">
+                  <input v-model="task.done" type="checkbox">
                   <label></label>
                 </div>
 
                 <div class="ui transparent input">
-                  <input class="blackPlaceholder" placeholder="Type Something Here...">
+                  <input ref="title" v-model="task.title" v-validate="'required'" name="title" data-vv-as="項目標題" class="blackPlaceholder" placeholder="Type Something Here...">
+                </div>
+
+                <div v-if="errors.first('title')">
+                  <span class="text-danger">{{ errors.first('title') }}</span>
                 </div>
               </div>
               <div>
-                <button class="ui icon button" style="background-color: transparent;">
-                  <i class="star outline icon"></i>
+                <button @click="task.importanat = !task.importanat" class="ui icon button" style="background-color: transparent;">
+                  <i :class="{ outline: !task.importanat }" class="star icon"></i>
                 </button>
 
                 <button class="ui icon button" style="background-color: transparent;">
@@ -63,13 +67,13 @@
             </div>
           </div>
           <div class="content" style="display: flex; justify-content: center;">
-            <div class="ui form" style="width: 500px;">
+            <div class="ui form" style="width: 550px;">
               <div class="field">
                 <label>
                   <i class="calendar alternate outline icon"></i>
                   Deadline
                 </label>
-                <input placeholder="YYYY/MM/DD hh:mm">
+                <input v-model="task.deadline" class="flatpickr" placeholder="YYYY-MM-DD hh:mm">
               </div>
 
               <div class="field">
@@ -88,17 +92,17 @@
                   <i class="comment alternate outline icon"></i>
                   Comment
                 </label>
-                <textarea rows="5" placeholder="Type your memo here..."></textarea>
+                <textarea v-model="task.comment" rows="5" placeholder="Type your memo here..."></textarea>
               </div>
             </div>
           </div>
           <div class="content" style="padding: 0; border: 1px solid rgba(34,36,38,.1);">
             <div class="ui two bottom attached buttons">
-              <button @click="addTaskShow = !addTaskShow" class="ui button cancelBtn">
+              <button @click="addTaskShow = !addTaskShow; $validator.reset();" class="ui button cancelBtn">
                 <i class="times icon"></i>
                 Cancel
               </button>
-              <button class="ui button keepBtn">
+              <button @click="addTask" class="ui button keepBtn">
                 <i class="plus icon"></i>
                 Add Task
               </button>
@@ -107,109 +111,116 @@
         </div>
         <!-- end 新增的詳細欄位 -->
 
-        <!-- 檢視與編輯欄位 -->
-        <div v-show="!editTaskShow" class="ui card raisedShadow" style="background-color: #F2F2F2">
-          <div class="content">
-            <div class="header" style="display: flex; justify-content: space-between; align-items: center;">
-              <!-- 標題 -->
-              <div>
-                <div class="ui checkbox">
-                  <input type="checkbox">
-                  <label></label>
-                </div>
-                代辦事項第一項
-              </div>
-        
-              <div>
-                <button class="ui icon button" style="background-color: transparent;">
-                  <i class="star outline icon"></i>
-                </button>
-          
-                <button @click="editTaskShow = !editTaskShow" class="ui icon button" style="background-color: transparent;">
-                  <i class="pencil alternate icon"></i>
-                </button>
-              </div>
-              <!-- end 標題 -->
-            </div>
-            <span style="margin: 0 1rem;"></span>
-            <i class="calendar alternate outline icon"></i>
-            <i class="file outline icon"></i>
-            <i class="comment alternate outline icon"></i>
-          </div>
-        </div>
-        <!-- end 檢視與編輯欄位 -->
-
-        <!-- 檢視與編輯的詳細欄位 -->
-        <div v-show="editTaskShow" class="ui card raisedShadow" style="background-color: #F2F2F2">
-          <div class="content">
-            <div class="header" style="display: flex; justify-content: space-between; align-items: center;">
-              <!-- 標題 -->
-              <div>
-                <div class="ui checkbox">
-                  <input type="checkbox">
-                  <label></label>
+        <div v-for="task in tasks" :key="task.taskId">
+          <!-- 檢視與編輯欄位 -->
+          <div v-show="!task.editTaskShow" class="ui card raisedShadow" style="background-color: #F2F2F2">
+            <div class="content">
+              <div class="header" style="display: flex; justify-content: space-between; align-items: center;">
+                <!-- 標題 -->
+                <div>
+                  <div class="ui checkbox">
+                    <input v-model="task.done" type="checkbox">
+                    <label></label>
+                  </div>
+                  <span :class="{ 'text-done': task.done }">{{ task.title }}</span>
                 </div>
 
-                <div class="ui transparent input">
-                  <input class="blackPlaceholder" placeholder="Type Something Here...">
-                </div>
-              </div>
-              <div>
-                <button class="ui icon button" style="background-color: transparent;">
-                  <i class="star outline icon"></i>
-                </button>
+                <div>
+                  <button @click="task.importanat = !task.importanat" class="ui icon button" style="background-color: transparent;">
+                    <i :class="{ outline: !task.importanat }" class="star icon"></i>
+                  </button>
 
-                <button class="ui icon button" style="background-color: transparent;">
-                  <i class="pencil alternate icon"></i>
-                </button>
+                  <button @click="task.editTaskShow = !task.editTaskShow; addTaskShow = false;" class="ui icon button" style="background-color: transparent;">
+                    <i class="pencil alternate icon"></i>
+                  </button>
+                </div>
+                <!-- end 標題 -->
               </div>
-              <!-- end 標題 -->
+              <span v-if="task.deadline !== '' || task.file !== '' || task.comment !== ''" style="margin: 0 1rem;"></span>
+              <i v-if="task.deadline !== ''" class="calendar alternate outline icon"></i>
+              <span>{{ task.deadline }}</span>
+              <i v-if="task.file !== ''" class="file outline icon"></i>
+              <i v-if="task.comment !== ''" class="comment alternate outline icon"></i>
             </div>
           </div>
-          <div class="content" style="display: flex; justify-content: center;">
-            <div class="ui form" style="width: 500px;">
-              <div class="field">
-                <label>
-                  <i class="calendar alternate outline icon"></i>
-                  Deadline
-                </label>
-                <input placeholder="YYYY/MM/DD hh:mm">
-              </div>
+          <!-- end 檢視與編輯欄位 -->
 
-              <div class="field">
-                <label>
-                  <i class="file outline icon"></i>
-                  File
-                </label>
-                <label for="file" class="ui icon button" style="display: inline-block;">
+          <!-- 檢視與編輯的詳細欄位 -->
+          <div v-show="task.editTaskShow" class="ui card raisedShadow" style="background-color: #F2F2F2">
+            <div class="content">
+              <div class="header" style="display: flex; justify-content: space-between; align-items: center;">
+                <!-- 標題 -->
+                <div>
+                  <div class="ui checkbox">
+                    <input v-model="task.done" type="checkbox">
+                    <label></label>
+                  </div>
+
+                  <div class="ui transparent input">
+                    <input v-model="task.title" class="blackPlaceholder" placeholder="Type Something Here...">
+                  </div>
+                </div>
+                <div>
+                  <button @click="task.importanat = !task.importanat" class="ui icon button" style="background-color: transparent;">
+                    <i :class="{ outline: !task.importanat }" class="star icon"></i>
+                  </button>
+
+                  <button class="ui icon button" style="background-color: transparent;">
+                    <i class="pencil alternate icon"></i>
+                  </button>
+                </div>
+                <!-- end 標題 -->
+              </div>
+            </div>
+            <div class="content" style="display: flex; justify-content: center;">
+              <div class="ui form" style="width: 550px;">
+                <div class="field">
+                  <label>
+                    <i class="calendar alternate outline icon"></i>
+                    Deadline
+                  </label>
+                  <input v-model="task.deadline" class="flatpickr" placeholder="YYYY-MM-DD hh:mm">
+                </div>
+
+                <div class="field">
+                  <label>
+                    <i class="file outline icon"></i>
+                    File
+                  </label>
+                  <label for="file" class="ui icon button" style="display: inline-block;">
+                    <i class="plus icon"></i>
+                  </label>
+                  <input type="file" id="file" style="display: none;">
+                </div>
+
+                <div class="field">
+                  <label>
+                    <i class="comment alternate outline icon"></i>
+                    Comment
+                  </label>
+                  <textarea v-model="task.comment" rows="5" placeholder="Type your memo here..."></textarea>
+                </div>
+              </div>
+            </div>
+            <div class="content" style="padding: 0; border: 1px solid rgba(34,36,38,.1);">
+              <div class="ui two bottom attached buttons">
+                <button @click="task.editTaskShow = !task.editTaskShow; $validator.reset();" class="ui button cancelBtn">
+                  <i class="times icon"></i>
+                  Cancel
+                </button>
+                <button @click="editSave" class="ui button keepBtn">
                   <i class="plus icon"></i>
-                </label>
-                <input type="file" id="file" style="display: none;">
-              </div>
-
-              <div class="field">
-                <label>
-                  <i class="comment alternate outline icon"></i>
-                  Comment
-                </label>
-                <textarea rows="5" placeholder="Type your memo here..."></textarea>
+                  Save
+                </button>
               </div>
             </div>
           </div>
-          <div class="content" style="padding: 0; border: 1px solid rgba(34,36,38,.1);">
-            <div class="ui two bottom attached buttons">
-              <button @click="editTaskShow = !editTaskShow" class="ui button cancelBtn">
-                <i class="times icon"></i>
-                Cancel
-              </button>
-              <button class="ui button keepBtn">
-                <i class="plus icon"></i>
-                Add Task
-              </button>
-            </div>
-          </div>
+          <!-- end 檢視與編輯的詳細欄位 -->
         </div>
-        <!-- end 檢視與編輯的詳細欄位 -->
+
+        <div style="font-size: 1.5rem; color: grey; font-style: italic;">
+          {{ doneTaskCount }} tasks left
+        </div>
 
       </div>
 
@@ -218,27 +229,29 @@
         <div class="ui segment raised">
           second
         </div>
-      
+
       </div>
 
       <div v-if="tab === 'Completed'" class="ui text container">
-      
+
         <div class="ui segment raised">
           third
         </div>
-      
+
       </div>
     </div>
   </main>
 
-  <script src="https://wzrd.in/standalone/uuid%2Fv4@latest"></script>
+  <script src="./src/lib/uuidv4.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vee-validate@latest/dist/vee-validate.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vee-validate@latest/dist/locale/zh_TW.js"></script>
   <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.3.1/dist/semantic.min.js"></script>
   <script src="https://momentjs.com/downloads/moment.min.js"></script>
   <script src="https://npmcdn.com/flatpickr@4.5.0/dist/flatpickr.min.js"></script>
   <script src="https://npmcdn.com/flatpickr@4.5.0/dist/l10n/zh.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.4/lodash.min.js"></script>
   <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
-  <script src="./src/js/init.js"></script>
   <script type="text/babel" src="./src/js/index.js"></script>
 </body>
 

@@ -1,10 +1,12 @@
+/* 字體要等真的研究 Semantic UI 的覆寫 有很多 css 屬性都直接用 !important 覆蓋了 */
 body {
-    font-family: 'Avenir', Helvetica, Arial, "WenQuanYi Zen Hei", "儷黑 Pro", "LiHei Pro", "黑體-繁", "Heiti TC", "微軟正黑體", "Microsoft JhengHei", sans-serif;
+    /* font-family: 'Avenir', Helvetica, Arial, "WenQuanYi Zen Hei", "儷黑 Pro", "LiHei Pro", "黑體-繁", "Heiti TC", "微軟正黑體", "Microsoft JhengHei", sans-serif !important;
     -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+    -moz-osx-font-smoothing: grayscale; */
     background-color: #E1E1E1;
 }
 
+/* 最上列 tab */
 #todoListMain .ui.pointing.secondary.menu>a {
     color: white;
 }
@@ -12,21 +14,21 @@ body {
 #todoListMain .ui.pointing.secondary.menu>a.active {
     border-color: #00408B;
 }
+/* end 最上列 tab */
 
+/* card */
 #todoListMain .ui.card {
     width: auto;
-}
-
-#todoListMain .ui.card {
     margin-top: 0;
 }
 
-#todoListMain .ui.card>.extra {
-    padding: 0;
+#todoListMain .ui.card:last-child {
+    margin-bottom: 1em;
 }
+/* end card */
 
-#todoListBody .raisedShadow {
-    box-shadow: 0 2px 4px 0 rgba(34, 36, 38, .12), 0 2px 10px 0 rgba(34, 36, 38, .15);
+#todoListMain .star.icon:not(.outline) {
+    color: #F5A623;
 }
 
 button.cancelBtn {
@@ -61,4 +63,19 @@ button.keepBtn:active {
 
 input.blackPlaceholder::placeholder {
     color: rgba(0, 0, 0, 0.795) !important;
+}
+
+.text-danger {
+    margin-left: 2em;
+    font-size: 0.6em;
+    color: red;
+}
+
+.text-done {
+    color: #757575;
+    text-decoration: line-through;
+}
+
+.raisedShadow {
+    box-shadow: 0 2px 4px 0 rgba(34, 36, 38, .12), 0 2px 10px 0 rgba(34, 36, 38, .15);
 }
