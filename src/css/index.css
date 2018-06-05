@@ -1,21 +1,27 @@
-#todoListBody {
+body {
+    font-family: 'Avenir', Helvetica, Arial, "WenQuanYi Zen Hei", "儷黑 Pro", "LiHei Pro", "黑體-繁", "Heiti TC", "微軟正黑體", "Microsoft JhengHei", sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
     background-color: #E1E1E1;
 }
 
-#todoListBody .ui.pointing.secondary.menu>a {
+#todoListMain .ui.pointing.secondary.menu>a {
     color: white;
+}
+
+#todoListMain .ui.pointing.secondary.menu>a.active {
     border-color: #00408B;
 }
 
-#todoListBody .ui.card {
+#todoListMain .ui.card {
     width: auto;
 }
 
-#todoListBody .ui.card {
+#todoListMain .ui.card {
     margin-top: 0;
 }
 
-#todoListBody .ui.card>.extra {
+#todoListMain .ui.card>.extra {
     padding: 0;
 }
 
@@ -53,8 +59,6 @@ button.keepBtn:active {
     color: white !important;
 }
 
-input::placeholder,
-textarea::placeholder {
-    color: black;
-    font-style: italic;
+input.blackPlaceholder::placeholder {
+    color: rgba(0, 0, 0, 0.795) !important;
 }
