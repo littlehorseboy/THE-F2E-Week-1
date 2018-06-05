@@ -45,7 +45,7 @@ const vm = new Vue({
   },
   computed: {
     doneTaskCount() {
-      return this.tasks.filter(task => task.done).length;
+      return this.tasks.filter(task => !task.done).length;
     },
   },
   methods: {

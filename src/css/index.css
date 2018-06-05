@@ -1,4 +1,5 @@
 /* 字體要等真的研究 Semantic UI 的覆寫 有很多 css 屬性都直接用 !important 覆蓋了 */
+
 body {
     /* font-family: 'Avenir', Helvetica, Arial, "WenQuanYi Zen Hei", "儷黑 Pro", "LiHei Pro", "黑體-繁", "Heiti TC", "微軟正黑體", "Microsoft JhengHei", sans-serif !important;
     -webkit-font-smoothing: antialiased;
@@ -7,6 +8,7 @@ body {
 }
 
 /* 最上列 tab */
+
 #todoListMain .ui.pointing.secondary.menu>a {
     color: white;
 }
@@ -14,9 +16,11 @@ body {
 #todoListMain .ui.pointing.secondary.menu>a.active {
     border-color: #00408B;
 }
+
 /* end 最上列 tab */
 
 /* card */
+
 #todoListMain .ui.card {
     width: auto;
     margin-top: 0;
@@ -25,6 +29,7 @@ body {
 #todoListMain .ui.card:last-child {
     margin-bottom: 1em;
 }
+
 /* end card */
 
 #todoListMain .star.icon:not(.outline) {
@@ -63,6 +68,16 @@ button.keepBtn:active {
 
 input.blackPlaceholder::placeholder {
     color: rgba(0, 0, 0, 0.795) !important;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+    transition: opacity .5s;
+}
+
+.fade-enter,
+.fade-leave-to {
+    opacity: 0;
 }
 
 .text-danger {
