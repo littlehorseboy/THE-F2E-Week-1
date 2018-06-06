@@ -2,6 +2,24 @@ Vue.use(VeeValidate, {
   locale: 'zh_TW',
 });
 
+Vue.component('edit-tasks', {
+  template: '#edittasks',
+  data() {
+    return {
+      editTaskShow: false,
+    };
+  },
+  props: {
+    task: Object,
+    addTaskShow: Boolean,
+  },
+  methods: {
+    editSave() {
+
+    },
+  }
+});
+
 const vm = new Vue({
   el: '#todoListMain',
   data: {
@@ -20,10 +38,8 @@ const vm = new Vue({
     
     tasks: [
       {
-        editTaskShow: false,
-
         taskId: uuidv4(),
-        title: '代辦事項第一項',
+        title: '吃飯',
         deadline: '2018-06-05',
         file: 'file01',
         comment: '註解?',
@@ -31,10 +47,17 @@ const vm = new Vue({
         done: true,
       },
       {
-        editTaskShow: false,
-
         taskId: uuidv4(),
-        title: '代辦事項第二項',
+        title: '睡覺',
+        deadline: '2018-06-07',
+        file: 'file01',
+        comment: '註解?',
+        importanat: true,
+        done: false,
+      },
+      {
+        taskId: uuidv4(),
+        title: '打東東',
         deadline: '2018-06-07',
         file: 'file01',
         comment: '註解?',
@@ -65,6 +88,8 @@ const vm = new Vue({
           const task = _.cloneDeep(this.task);
           task.editTaskShow = false;
           this.tasks.push(task);
+
+          // 重置所有值
           Object.keys(this.task).forEach((key) => {
             if (key.indexOf('Id') !== -1) {
               this.task[key] = uuidv4();
@@ -75,12 +100,14 @@ const vm = new Vue({
           this.$validator.reset();
           this.addTaskShow = false;
 
-          return;
+          this.$nextTick(() => {
+            flatpickr('.flatpickr', {
+              enableTime: true,
+              locale: 'zh',
+            });
+          });
         }
       });
-    },
-    editSave() {
-
     },
   },
   mounted() {
@@ -96,6 +123,15 @@ const vm = new Vue({
           this.$refs.title.focus();
         });
       }
+    },
+    tab() {
+      debugger;
+      this.$nextTick(() => {
+        flatpickr('.flatpickr', {
+          enableTime: true,
+          locale: 'zh',
+        });
+      });
     },
   },
 });
