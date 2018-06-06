@@ -44,6 +44,16 @@ const vm = new Vue({
     ],
   },
   computed: {
+    sortedImpotantTasks() {
+      const compare = (a) => {
+        if (a.importanat) {
+          return -1;
+        } else {
+          return 1;
+        }
+      };
+      return this.tasks.sort(compare);
+    },
     doneTaskCount() {
       return this.tasks.filter(task => !task.done).length;
     },

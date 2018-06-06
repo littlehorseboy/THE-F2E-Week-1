@@ -38,7 +38,7 @@
           </div>
           <!-- end 新增欄位 -->
           <!-- 新增的詳細欄位 -->
-          <div v-show="addTaskShow" class="ui card raisedShadow animated fadeIn" style="background-color: #F2F2F2">
+          <div v-show="addTaskShow" :class="[task.importanat ? 'backgroundOrange' : 'backgroundGrey']" class="ui card raisedShadow animated fadeIn">
             <div class="content">
               <div class="header" style="display: flex; justify-content: space-between; align-items: center;">
                 <!-- 標題 -->
@@ -113,9 +113,9 @@
           </div>
           <!-- end 新增的詳細欄位 -->
 
-          <div v-for="task in tasks" :key="task.taskId">
+          <div v-for="task in sortedImpotantTasks" :key="task.taskId">
             <!-- 檢視與編輯欄位 -->
-            <div v-show="!task.editTaskShow" class="ui card raisedShadow animated fadeIn" style="background-color: #F2F2F2">
+            <div v-show="!task.editTaskShow" :class="[task.importanat ? 'backgroundOrange' : 'backgroundGrey']" class="ui card raisedShadow animated fadeIn">
               <div class="content">
                 <div class="header" style="display: flex; justify-content: space-between; align-items: center;">
                   <!-- 標題 -->
@@ -148,7 +148,7 @@
             <!-- end 檢視與編輯欄位 -->
 
             <!-- 檢視與編輯的詳細欄位 -->
-            <div v-show="task.editTaskShow" class="ui card raisedShadow" style="background-color: #F2F2F2">
+            <div v-show="task.editTaskShow" :class="[task.importanat ? 'backgroundOrange' : 'backgroundGrey']" class="ui card raisedShadow">
               <div class="content">
                 <div class="header" style="display: flex; justify-content: space-between; align-items: center;">
                   <!-- 標題 -->
