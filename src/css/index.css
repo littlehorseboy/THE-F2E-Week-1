@@ -36,6 +36,10 @@ body {
     color: #F5A623;
 }
 
+#todoListMain .pencil.icon:not(.alternate) {
+    color: #4A90E2;
+}
+
 button.cancelBtn {
     background-color: white !important;
     color: #D0021B !important;
@@ -70,7 +74,7 @@ input.blackPlaceholder::placeholder {
     color: rgba(0, 0, 0, 0.795) !important;
 }
 
-.fade-enter-active,
+/* .fade-enter-active,
 .fade-leave-active {
     transition: opacity .5s;
 }
@@ -78,7 +82,7 @@ input.blackPlaceholder::placeholder {
 .fade-enter,
 .fade-leave-to {
     opacity: 0;
-}
+} */
 
 .text-danger {
     margin-left: 2em;
@@ -100,5 +104,5 @@ input.blackPlaceholder::placeholder {
 }
 
 .raisedShadow {
-    box-shadow: 0 2px 4px 0 rgba(34, 36, 38, .12), 0 2px 10px 0 rgba(34, 36, 38, .15);
+    box-shadow: 0 2px 4px 0 rgba(34, 36, 38, .12), 0 2px 10px 0 rgba(34, 36, 38, .15) !important;
 }

@@ -30,6 +30,7 @@ const vm = new Vue({
       taskId: uuidv4(),
       title: '',
       deadline: '',
+      deadlineTime: '',
       file: '',
       comment: '',
       importanat: false,
@@ -40,27 +41,30 @@ const vm = new Vue({
       {
         taskId: uuidv4(),
         title: '吃飯',
-        deadline: '2018-06-05',
+        deadline: '2018/06/05',
+        deadlineTime: '01:00',
         file: 'file01',
-        comment: '註解?',
+        comment: '要先煮飯',
         importanat: false,
         done: true,
       },
       {
         taskId: uuidv4(),
         title: '睡覺',
-        deadline: '2018-06-07',
+        deadline: '2018/06/07',
+        deadlineTime: '',
         file: 'file01',
-        comment: '註解?',
+        comment: '要先閉眼睛',
         importanat: true,
         done: false,
       },
       {
         taskId: uuidv4(),
         title: '打東東',
-        deadline: '2018-06-07',
+        deadline: '2018/06/07',
+        deadlineTime: '',
         file: 'file01',
-        comment: '註解?',
+        comment: '要先找到東東',
         importanat: true,
         done: false,
       },
@@ -76,6 +80,12 @@ const vm = new Vue({
         }
       };
       return this.tasks.sort(compare);
+    },
+    inProgressTasks() {
+      return this.tasks.filter(task => !task.done);
+    },
+    completedTasks() {
+      return this.tasks.filter(task => task.done);
     },
     doneTaskCount() {
       return this.tasks.filter(task => !task.done).length;
@@ -102,9 +112,12 @@ const vm = new Vue({
 
           this.$nextTick(() => {
             flatpickr('.flatpickr', {
-              enableTime: true,
+              // enableTime: true,
+              allowInput: true,
+              dateFormat: 'Y/m/d',
               locale: 'zh',
             });
+
           });
         }
       });
@@ -112,8 +125,17 @@ const vm = new Vue({
   },
   mounted() {
     flatpickr('.flatpickr', {
-      enableTime: true,
+      // enableTime: true,
+      allowInput: true,
+      dateFormat: 'Y/m/d',
       locale: 'zh',
+    });
+
+    flatpickr('.flatpickrTime', {
+      enableTime: true,
+      noCalendar: true,
+      allowInput: true,
+      dateFormat: 'H:i',
     });
   },
   watch: {
@@ -124,14 +146,14 @@ const vm = new Vue({
         });
       }
     },
-    tab() {
-      debugger;
-      this.$nextTick(() => {
-        flatpickr('.flatpickr', {
-          enableTime: true,
-          locale: 'zh',
-        });
-      });
-    },
+    // tab() {
+    //   debugger;
+    //   this.$nextTick(() => {
+    //     flatpickr('.flatpickr', {
+    //       enableTime: true,
+    //       locale: 'zh',
+    //     });
+    //   });
+    // },
   },
 });

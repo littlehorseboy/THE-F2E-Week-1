@@ -29,8 +29,8 @@
     </div>
 
     <div class="ui fluid container">
-      <transition name="fade" mode="out-in">
-        <div v-if="tab === 'MyTasks'" key="MyTasks" class="ui text container">
+      <!-- <transition name="fade" mode="out-in"> -->
+        <div v-show="tab === 'MyTasks'" key="MyTasks" class="ui text container">
           <!-- 新增欄位 -->
           <div v-show="!addTaskShow" class="ui fluid left icon input animated fadeIn" style="margin: 1em 0;">
             <input @click="addTaskShow = !addTaskShow" type="text" placeholder="Add Task">
@@ -62,7 +62,7 @@
                   </button>
 
                   <button class="ui icon button" style="background-color: transparent;">
-                    <i class="pencil alternate icon"></i>
+                    <i :class="{ alternate: !addTaskShow }" class="pencil icon"></i>
                   </button>
                 </div>
                 <!-- end 標題 -->
@@ -75,7 +75,10 @@
                     <i class="calendar alternate outline icon"></i>
                     Deadline
                   </label>
-                  <input v-model="task.deadline" class="flatpickr" placeholder="YYYY-MM-DD hh:mm">
+                  <div style="display: flex; padding-left: 1.5rem; padding-right: 1.5rem;">
+                    <input v-model="task.deadline" class="flatpickr" placeholder="YYYY-MM-DD">
+                    <input v-model="task.deadlineTime" class="flatpickrTime" placeholder="hh:mm">
+                  </div>
                 </div>
 
                 <div class="field">
@@ -83,10 +86,12 @@
                     <i class="file outline icon"></i>
                     File
                   </label>
-                  <label for="file" class="ui icon button" style="display: inline-block;">
-                    <i class="plus icon"></i>
-                  </label>
-                  <input type="file" id="file" style="display: none;">
+                  <div style="display: flex; padding-left: 1.5rem; padding-right: 1.5rem;">
+                    <label for="file" class="ui icon button" style="display: inline-block;">
+                      <i class="plus icon"></i>
+                    </label>
+                    <input type="file" id="file" style="display: none;">
+                  </div>
                 </div>
 
                 <div class="field">
@@ -94,7 +99,9 @@
                     <i class="comment alternate outline icon"></i>
                     Comment
                   </label>
-                  <textarea v-model="task.comment" rows="5" placeholder="Type your memo here..."></textarea>
+                  <div style="display: flex; padding-left: 1.5rem; padding-right: 1.5rem;">
+                    <textarea v-model="task.comment" rows="5" placeholder="Type your memo here..."></textarea>
+                  </div>
                 </div>
               </div>
             </div>
@@ -121,7 +128,7 @@
 
         </div>
 
-        <div v-if="tab === 'InProgress'" key="InProgress" class="ui text container">
+        <div v-show="tab === 'InProgress'" key="InProgress" class="ui text container">
           <!-- 新增欄位 -->
           <div v-show="!addTaskShow" class="ui fluid left icon input animated fadeIn" style="margin: 1em 0;">
             <input @click="addTaskShow = !addTaskShow" type="text" placeholder="Add Task">
@@ -153,7 +160,7 @@
                   </button>
 
                   <button class="ui icon button" style="background-color: transparent;">
-                    <i class="pencil alternate icon"></i>
+                    <i :class="{ alternate: !addTaskShow }" class="pencil icon"></i>
                   </button>
                 </div>
                 <!-- end 標題 -->
@@ -166,26 +173,33 @@
                     <i class="calendar alternate outline icon"></i>
                     Deadline
                   </label>
-                  <input v-model="task.deadline" class="flatpickr" placeholder="YYYY-MM-DD hh:mm">
+                  <div style="display: flex; padding-left: 1.5rem; padding-right: 1.5rem;">
+                    <input v-model="task.deadline" class="flatpickr" placeholder="YYYY-MM-DD">
+                    <input v-model="task.deadlineTime" class="flatpickrTime" placeholder="hh:mm">
+                  </div>
                 </div>
-
+                
                 <div class="field">
                   <label>
                     <i class="file outline icon"></i>
                     File
                   </label>
-                  <label for="file" class="ui icon button" style="display: inline-block;">
-                    <i class="plus icon"></i>
-                  </label>
-                  <input type="file" id="file" style="display: none;">
+                  <div style="display: flex; padding-left: 1.5rem; padding-right: 1.5rem;">
+                    <label for="file" class="ui icon button" style="display: inline-block;">
+                      <i class="plus icon"></i>
+                    </label>
+                    <input type="file" id="file" style="display: none;">
+                  </div>
                 </div>
-
+                
                 <div class="field">
                   <label>
                     <i class="comment alternate outline icon"></i>
                     Comment
                   </label>
-                  <textarea v-model="task.comment" rows="5" placeholder="Type your memo here..."></textarea>
+                  <div style="display: flex; padding-left: 1.5rem; padding-right: 1.5rem;">
+                    <textarea v-model="task.comment" rows="5" placeholder="Type your memo here..."></textarea>
+                  </div>
                 </div>
               </div>
             </div>
@@ -204,14 +218,14 @@
           </div>
           <!-- end 新增的詳細欄位 -->
 
-          <edit-tasks v-for="task in sortedImpotantTasks" :key="task.taskId" :task="task"></edit-tasks>
+          <edit-tasks v-for="task in inProgressTasks" :key="task.taskId" :task="task"></edit-tasks>
 
           <div style="font-size: 1.5rem; color: grey; font-style: italic;">
             {{ doneTaskCount }} tasks left
           </div>
         </div>
 
-        <div v-if="tab === 'Completed'" key="Completed" class="ui text container">
+        <div v-show="tab === 'Completed'" key="Completed" class="ui text container">
           <!-- 新增欄位 -->
           <div v-show="!addTaskShow" class="ui fluid left icon input animated fadeIn" style="margin: 1em 0;">
             <input @click="addTaskShow = !addTaskShow" type="text" placeholder="Add Task">
@@ -243,7 +257,7 @@
                   </button>
 
                   <button class="ui icon button" style="background-color: transparent;">
-                    <i class="pencil alternate icon"></i>
+                    <i :class="{ alternate: !addTaskShow }" class="pencil icon"></i>
                   </button>
                 </div>
                 <!-- end 標題 -->
@@ -256,26 +270,33 @@
                     <i class="calendar alternate outline icon"></i>
                     Deadline
                   </label>
-                  <input v-model="task.deadline" class="flatpickr" placeholder="YYYY-MM-DD hh:mm">
+                  <div style="display: flex; padding-left: 1.5rem; padding-right: 1.5rem;">
+                    <input v-model="task.deadline" class="flatpickr" placeholder="YYYY-MM-DD">
+                    <input v-model="task.deadlineTime" class="flatpickrTime" placeholder="hh:mm">
+                  </div>
                 </div>
-
+                
                 <div class="field">
                   <label>
                     <i class="file outline icon"></i>
                     File
                   </label>
-                  <label for="file" class="ui icon button" style="display: inline-block;">
-                    <i class="plus icon"></i>
-                  </label>
-                  <input type="file" id="file" style="display: none;">
+                  <div style="display: flex; padding-left: 1.5rem; padding-right: 1.5rem;">
+                    <label for="file" class="ui icon button" style="display: inline-block;">
+                      <i class="plus icon"></i>
+                    </label>
+                    <input type="file" id="file" style="display: none;">
+                  </div>
                 </div>
-
+                
                 <div class="field">
                   <label>
                     <i class="comment alternate outline icon"></i>
                     Comment
                   </label>
-                  <textarea v-model="task.comment" rows="5" placeholder="Type your memo here..."></textarea>
+                  <div style="display: flex; padding-left: 1.5rem; padding-right: 1.5rem;">
+                    <textarea v-model="task.comment" rows="5" placeholder="Type your memo here..."></textarea>
+                  </div>
                 </div>
               </div>
             </div>
@@ -294,13 +315,13 @@
           </div>
           <!-- end 新增的詳細欄位 -->
 
-          <edit-tasks v-for="task in sortedImpotantTasks" :key="task.taskId" :task="task"></edit-tasks>
+          <edit-tasks v-for="task in completedTasks" :key="task.taskId" :task="task"></edit-tasks>
 
           <div style="font-size: 1.5rem; color: grey; font-style: italic;">
             {{ doneTaskCount }} tasks left
           </div>
         </div>
-      </transition>
+      <!-- </transition> -->
     </div>
   </main>
 
@@ -353,7 +374,7 @@
       <!-- end 檢視與編輯欄位 -->
 
       <!-- 檢視與編輯的詳細欄位 -->
-      <div v-show="editTaskShow" :class="[task.importanat ? 'backgroundOrange' : 'backgroundGrey']" class="ui card raisedShadow">
+      <div v-show="editTaskShow" :class="[task.importanat ? 'backgroundOrange' : 'backgroundGrey']" class="ui card raisedShadow animated fadeIn">
         <div class="content">
           <div class="header" style="display: flex; justify-content: space-between; align-items: center;">
             <!-- 標題 -->
@@ -373,7 +394,7 @@
               </button>
 
               <button class="ui icon button" style="background-color: transparent;">
-                <i class="pencil alternate icon"></i>
+                <i :class="{ alternate: !editTaskShow }" class="pencil icon"></i>
               </button>
             </div>
             <!-- end 標題 -->
@@ -386,7 +407,10 @@
                 <i class="calendar alternate outline icon"></i>
                 Deadline
               </label>
-              <input v-model="task.deadline" class="flatpickr" placeholder="YYYY-MM-DD hh:mm">
+              <div style="display: flex; padding-left: 1.5rem; padding-right: 1.5rem;">
+                <input v-model="task.deadline" class="flatpickr" placeholder="YYYY-MM-DD">
+                <input v-model="task.deadlineTime" class="flatpickrTime" placeholder="hh:mm">
+              </div>
             </div>
 
             <div class="field">
@@ -394,10 +418,12 @@
                 <i class="file outline icon"></i>
                 File
               </label>
-              <label for="file" class="ui icon button" style="display: inline-block;">
-                <i class="plus icon"></i>
-              </label>
-              <input type="file" id="file" style="display: none;">
+              <div style="display: flex; padding-left: 1.5rem; padding-right: 1.5rem;">
+                <label for="file" class="ui icon button" style="display: inline-block;">
+                  <i class="plus icon"></i>
+                </label>
+                <input type="file" id="file" style="display: none;">
+              </div>
             </div>
 
             <div class="field">
@@ -405,7 +431,9 @@
                 <i class="comment alternate outline icon"></i>
                 Comment
               </label>
-              <textarea v-model="task.comment" rows="5" placeholder="Type your memo here..."></textarea>
+              <div style="display: flex; padding-left: 1.5rem; padding-right: 1.5rem;">
+                <textarea v-model="task.comment" rows="5" placeholder="Type your memo here..."></textarea>
+              </div>
             </div>
           </div>
         </div>
