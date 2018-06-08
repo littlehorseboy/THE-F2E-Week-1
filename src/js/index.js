@@ -6,7 +6,7 @@ Vue.component('edit-tasks', {
   template: '#edittasks',
   data() {
     return {
-      editTaskShow: false,
+      
     };
   },
   props: {
@@ -15,9 +15,9 @@ Vue.component('edit-tasks', {
   },
   methods: {
     editSave() {
-
+      this.$emit('edit-save');
     },
-  }
+  },
 });
 
 const vm = new Vue({
@@ -39,6 +39,8 @@ const vm = new Vue({
     
     tasks: [
       {
+        editTaskShow: false,
+
         taskId: uuidv4(),
         title: '吃飯',
         deadline: '2018/06/05',
@@ -49,6 +51,8 @@ const vm = new Vue({
         done: true,
       },
       {
+        editTaskShow: false,
+
         taskId: uuidv4(),
         title: '睡覺',
         deadline: '2018/06/07',
@@ -59,6 +63,8 @@ const vm = new Vue({
         done: false,
       },
       {
+        editTaskShow: false,
+
         taskId: uuidv4(),
         title: '打東東',
         deadline: '2018/06/07',
@@ -117,11 +123,21 @@ const vm = new Vue({
               dateFormat: 'Y/m/d',
               locale: 'zh',
             });
-
           });
+
+          localStorage.setItem('tasks', JSON.stringify(this.tasks));
         }
       });
     },
+    editSave(task) {
+      // 要改成來源跟目前 兩個陣列來儲存
+      task.editTaskShow = false;
+      localStorage.setItem('tasks', JSON.stringify(this.tasks));
+    },
+  },
+  created() {
+    const tasks = JSON.parse(localStorage.getItem('tasks'));
+    this.tasks = this.tasks.concat(tasks);
   },
   mounted() {
     flatpickr('.flatpickr', {
@@ -139,13 +155,6 @@ const vm = new Vue({
     });
   },
   watch: {
-    addTaskShow(value) {
-      if (value === true) {
-        this.$nextTick(() => {
-          this.$refs.title.focus();
-        });
-      }
-    },
     // tab() {
     //   debugger;
     //   this.$nextTick(() => {
