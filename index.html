@@ -86,11 +86,16 @@
                     <i class="file outline icon"></i>
                     File
                   </label>
-                  <div style="display: flex; padding-left: 1.5rem; padding-right: 1.5rem;">
-                    <label for="file" class="ui icon button" style="display: inline-block;">
+                  <div style="display: flex; align-items: center; padding-left: 1.5rem; padding-right: 1.5rem;">
+                    <div v-if="task.file !== ''" style="padding-right: 1rem;">
+                      {{ task.file }}
+                      <br>
+                      <span style="color: #757575;">{{ relativeTime }}</span>
+                    </div>
+                    <label for="fileMyTasks" class="ui icon button" style="display: inline-block; color: white;">
                       <i class="plus icon"></i>
                     </label>
-                    <input type="file" id="file" style="display: none;">
+                    <input @change="fileChange" type="file" id="fileMyTasks" style="display: none;">
                   </div>
                 </div>
 
@@ -121,7 +126,9 @@
           <!-- end 新增的詳細欄位 -->
 
           <edit-tasks v-for="(task, index) in sortedImpotantTasks" :key="task.taskId" :task="task"
-            @edit-save="editSave(task, originalSortedImpotantTasks[index])"
+            @edit-cancel="editCancel(task, originalSortedImpotantTasks[index])"
+            @edit-save="editSave(task)"
+            @edit-remove="editRemove"
             @done-change="doneChange" @important-change="importantChange"></edit-tasks>
 
           <div style="font-size: 1.5rem; color: grey; font-style: italic;">
@@ -186,11 +193,16 @@
                     <i class="file outline icon"></i>
                     File
                   </label>
-                  <div style="display: flex; padding-left: 1.5rem; padding-right: 1.5rem;">
-                    <label for="file" class="ui icon button" style="display: inline-block;">
+                  <div style="display: flex; align-items: center; padding-left: 1.5rem; padding-right: 1.5rem;">
+                    <div v-if="task.file !== ''" style="padding-right: 1rem;">
+                      {{ task.file }}
+                      <br>
+                      <span style="color: #757575;">{{ relativeTime }}</span>
+                    </div>
+                    <label for="fileInProgress" class="ui icon button" style="display: inline-block; color: white;">
                       <i class="plus icon"></i>
                     </label>
-                    <input type="file" id="file" style="display: none;">
+                    <input @change="fileChange" type="file" id="fileInProgress" style="display: none;">
                   </div>
                 </div>
                 
@@ -221,7 +233,9 @@
           <!-- end 新增的詳細欄位 -->
 
           <edit-tasks v-for="(task, index) in inProgressTasks" :key="task.taskId" :task="task"
-            @edit-save="editSave(task, originalInProgressTasks[index])"
+            @edit-cancel="editCancel(task, originalSortedImpotantTasks[index])"
+            @edit-save="editSave(task)"
+            @edit-remove="editRemove"
             @done-change="doneChange" @important-change="importantChange"></edit-tasks>
 
           <div style="font-size: 1.5rem; color: grey; font-style: italic;">
@@ -285,11 +299,16 @@
                     <i class="file outline icon"></i>
                     File
                   </label>
-                  <div style="display: flex; padding-left: 1.5rem; padding-right: 1.5rem;">
-                    <label for="file" class="ui icon button" style="display: inline-block;">
+                  <div style="display: flex; align-items: center; padding-left: 1.5rem; padding-right: 1.5rem;">
+                    <div v-if="task.file !== ''" style="padding-right: 1rem;">
+                      {{ task.file }}
+                      <br>
+                      <span style="color: #757575;">{{ relativeTime }}</span>
+                    </div>
+                    <label for="fileCompleted" class="ui icon button" style="display: inline-block; color: white;">
                       <i class="plus icon"></i>
                     </label>
-                    <input type="file" id="file" style="display: none;">
+                    <input @change="fileChange" type="file" id="fileCompleted" style="display: none;">
                   </div>
                 </div>
                 
@@ -320,7 +339,9 @@
           <!-- end 新增的詳細欄位 -->
 
           <edit-tasks v-for="(task, index) in completedTasks" :key="task.taskId" :task="task"
-            @edit-save="editSave(task, originalCompletedTasks[index])"
+            @edit-cancel="editCancel(task, originalSortedImpotantTasks[index])"
+            @edit-save="editSave(task)"
+            @edit-remove="editRemove"
             @done-change="doneChange" @important-change="importantChange"></edit-tasks>
 
           <div style="font-size: 1.5rem; color: grey; font-style: italic;">
@@ -395,6 +416,10 @@
               </div>
             </div>
             <div>
+              <button @click="taskRemove" class="ui icon button" style="background-color: transparent;">
+                <i class="trash alternate outline icon"></i>
+              </button>
+
               <button @click="task.important = !task.important" class="ui icon button" style="background-color: transparent;">
                 <i :class="{ outline: !task.important }" class="star icon"></i>
               </button>
@@ -424,11 +449,16 @@
                 <i class="file outline icon"></i>
                 File
               </label>
-              <div style="display: flex; padding-left: 1.5rem; padding-right: 1.5rem;">
-                <label for="file" class="ui icon button" style="display: inline-block;">
+              <div style="display: flex; align-items: center; padding-left: 1.5rem; padding-right: 1.5rem;">
+                <div v-if="task.file !== ''" style="padding-right: 1rem;">
+                  {{ task.file }}
+                  <br>
+                  <span style="color: #757575;">{{ relativeTime }}</span>
+                </div>
+                <label :for="`file_${task.taskId}`" class="ui icon button" style="display: inline-block; color: white;">
                   <i class="plus icon"></i>
                 </label>
-                <input type="file" id="file" style="display: none;">
+                <input @change="fileChange" :id="`file_${task.taskId}`" type="file" style="display: none;">
               </div>
             </div>
 

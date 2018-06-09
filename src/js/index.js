@@ -13,14 +13,26 @@ Vue.component('edit-tasks', {
     task: Object,
     addTaskShow: Boolean,
   },
+  computed: {
+    relativeTime() {
+      return !this.task.lastUploadedDate ? '' : moment(this.task.lastUploadedDate).fromNow();
+    },
+  },
   methods: {
     editCancel() {
-      this.$emit('edit-save');
+      this.$emit('edit-cancel');
       // this.task.editTaskShow = !this.task.editTaskShow;
       this.$validator.reset();
     },
     editSave() {
       this.$emit('edit-save');
+    },
+    taskRemove() {
+      this.$emit('edit-remove', this.task.taskId);
+    },
+    fileChange(e) {
+      this.task.file = e.target.files[0].name;
+      this.task.lastUploadedDate = moment().format();
     },
   },
   watch: {
@@ -46,6 +58,7 @@ const vm = new Vue({
       deadline: '',
       deadlineTime: '',
       file: '',
+      lastUploadedDate: '',
       comment: '',
       important: false,
       done: false,
@@ -60,6 +73,7 @@ const vm = new Vue({
       //   deadline: '2018/06/05',
       //   deadlineTime: '01:00',
       //   file: 'file01',
+      //   lastUploadedDate: '2018-02-10T00:02:55+08:00',
       //   comment: '要先煮飯',
       //   important: false,
       //   done: true,
@@ -72,6 +86,7 @@ const vm = new Vue({
       //   deadline: '2018/06/07',
       //   deadlineTime: '',
       //   file: 'file01',
+      //   lastUploadedDate: '2018-05-02T00:02:55+08:00',
       //   comment: '要先閉眼睛',
       //   important: true,
       //   done: false,
@@ -84,6 +99,7 @@ const vm = new Vue({
       //   deadline: '2018/06/07',
       //   deadlineTime: '',
       //   file: 'file01',
+      //   lastUploadedDate: '2018-06-08T00:02:55+08:00',
       //   comment: '要先找到東東',
       //   important: true,
       //   done: false,
@@ -127,6 +143,10 @@ const vm = new Vue({
     },
     originalCompletedTasks() {
       return this.originalTasks.filter(task => task.done);
+    },
+
+    relativeTime() {
+      return !this.task.lastUploadedDate ? '' : moment(this.task.lastUploadedDate).fromNow();
     },
     
     doneTaskCount() {
@@ -174,17 +194,30 @@ const vm = new Vue({
         }
       });
     },
-    editSave(task, originalTask) {
+    editCancel(task, originalTask) {
       if (originalTask) {
         Object.keys(task).forEach((key) => {
           task[key] = originalTask[key];
         });
-      } else {
-        this.originalTasks = _.cloneDeep(this.tasks);
-
-        localStorage.setItem('tasks', JSON.stringify(this.tasks));
       }
+
       task.editTaskShow = false;
+    },
+    editSave(task) {
+      this.originalTasks = _.cloneDeep(this.tasks);
+
+      localStorage.setItem('tasks', JSON.stringify(this.tasks));
+      
+      task.editTaskShow = false;
+    },
+    editRemove(id) {
+      const taskIndex = vm.tasks.findIndex(task => task.taskId === id);
+      vm.tasks.splice(taskIndex, 1);
+
+      const originalTaskIndex = vm.originalTasks.findIndex(task => task.taskId === id);
+      vm.originalTasks.splice(originalTaskIndex, 1);
+
+      localStorage.setItem('tasks', JSON.stringify(this.tasks));
     },
 
     doneChange(id, value) {
@@ -198,6 +231,11 @@ const vm = new Vue({
       task.important = value;
 
       localStorage.setItem('tasks', JSON.stringify(this.tasks));
+    },
+
+    fileChange(e) {
+      this.task.file = e.target.files[0].name;
+      this.task.lastUploadedDate = moment().format();
     },
   },
   created() {
