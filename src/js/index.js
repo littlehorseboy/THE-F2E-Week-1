@@ -14,8 +14,22 @@ Vue.component('edit-tasks', {
     addTaskShow: Boolean,
   },
   methods: {
+    editCancel() {
+      this.$emit('edit-save');
+      // this.task.editTaskShow = !this.task.editTaskShow;
+      this.$validator.reset();
+    },
     editSave() {
       this.$emit('edit-save');
+    },
+  },
+  watch: {
+    'task.done': function(value) {
+      this.$emit('done-change', this.task.taskId, value);
+    },
+    'task.important': function(value) {
+      // horseTODO: 不知道為什麼這個 watch 會觸發到兩次 上面的就正常 一定要找到原因解決這種情況
+      this.$emit('important-change', this.task.taskId, value);
     },
   },
 });
@@ -33,53 +47,57 @@ const vm = new Vue({
       deadlineTime: '',
       file: '',
       comment: '',
-      importanat: false,
+      important: false,
       done: false,
     },
     
     tasks: [
-      {
-        editTaskShow: false,
+      // {
+      //   editTaskShow: false,
 
-        taskId: uuidv4(),
-        title: '吃飯',
-        deadline: '2018/06/05',
-        deadlineTime: '01:00',
-        file: 'file01',
-        comment: '要先煮飯',
-        importanat: false,
-        done: true,
-      },
-      {
-        editTaskShow: false,
+      //   taskId: uuidv4(),
+      //   title: '吃飯',
+      //   deadline: '2018/06/05',
+      //   deadlineTime: '01:00',
+      //   file: 'file01',
+      //   comment: '要先煮飯',
+      //   important: false,
+      //   done: true,
+      // },
+      // {
+      //   editTaskShow: false,
 
-        taskId: uuidv4(),
-        title: '睡覺',
-        deadline: '2018/06/07',
-        deadlineTime: '',
-        file: 'file01',
-        comment: '要先閉眼睛',
-        importanat: true,
-        done: false,
-      },
-      {
-        editTaskShow: false,
+      //   taskId: uuidv4(),
+      //   title: '睡覺',
+      //   deadline: '2018/06/07',
+      //   deadlineTime: '',
+      //   file: 'file01',
+      //   comment: '要先閉眼睛',
+      //   important: true,
+      //   done: false,
+      // },
+      // {
+      //   editTaskShow: false,
 
-        taskId: uuidv4(),
-        title: '打東東',
-        deadline: '2018/06/07',
-        deadlineTime: '',
-        file: 'file01',
-        comment: '要先找到東東',
-        importanat: true,
-        done: false,
-      },
+      //   taskId: uuidv4(),
+      //   title: '打東東',
+      //   deadline: '2018/06/07',
+      //   deadlineTime: '',
+      //   file: 'file01',
+      //   comment: '要先找到東東',
+      //   important: true,
+      //   done: false,
+      // },
+    ],
+
+    originalTasks: [
+
     ],
   },
   computed: {
     sortedImpotantTasks() {
       const compare = (a) => {
-        if (a.importanat) {
+        if (a.important) {
           return -1;
         } else {
           return 1;
@@ -93,6 +111,24 @@ const vm = new Vue({
     completedTasks() {
       return this.tasks.filter(task => task.done);
     },
+
+    originalSortedImpotantTasks() {
+      const compare = (a) => {
+        if (a.important) {
+          return -1;
+        } else {
+          return 1;
+        }
+      };
+      return this.originalTasks.sort(compare);
+    },
+    originalInProgressTasks() {
+      return this.originalTasks.filter(task => !task.done);
+    },
+    originalCompletedTasks() {
+      return this.originalTasks.filter(task => task.done);
+    },
+    
     doneTaskCount() {
       return this.tasks.filter(task => !task.done).length;
     },
@@ -123,21 +159,54 @@ const vm = new Vue({
               dateFormat: 'Y/m/d',
               locale: 'zh',
             });
+
+            flatpickr('.flatpickrTime', {
+              enableTime: true,
+              noCalendar: true,
+              allowInput: true,
+              dateFormat: 'H:i',
+            });
           });
+
+          this.originalTasks = _.cloneDeep(this.tasks);
 
           localStorage.setItem('tasks', JSON.stringify(this.tasks));
         }
       });
     },
-    editSave(task) {
-      // 要改成來源跟目前 兩個陣列來儲存
+    editSave(task, originalTask) {
+      if (originalTask) {
+        Object.keys(task).forEach((key) => {
+          task[key] = originalTask[key];
+        });
+      } else {
+        this.originalTasks = _.cloneDeep(this.tasks);
+
+        localStorage.setItem('tasks', JSON.stringify(this.tasks));
+      }
       task.editTaskShow = false;
+    },
+
+    doneChange(id, value) {
+      const task = vm.originalTasks.find(task => task.taskId === id);
+      task.done = value;
+
+      localStorage.setItem('tasks', JSON.stringify(this.tasks));
+    },
+    importantChange(id, value) {
+      const task = vm.originalTasks.find(task => task.taskId === id);
+      task.important = value;
+
       localStorage.setItem('tasks', JSON.stringify(this.tasks));
     },
   },
   created() {
     const tasks = JSON.parse(localStorage.getItem('tasks'));
-    this.tasks = this.tasks.concat(tasks);
+    if (tasks) {
+      this.tasks = this.tasks.concat(tasks);
+    }
+
+    this.originalTasks = _.cloneDeep(this.tasks);
   },
   mounted() {
     flatpickr('.flatpickr', {
@@ -153,16 +222,5 @@ const vm = new Vue({
       allowInput: true,
       dateFormat: 'H:i',
     });
-  },
-  watch: {
-    // tab() {
-    //   debugger;
-    //   this.$nextTick(() => {
-    //     flatpickr('.flatpickr', {
-    //       enableTime: true,
-    //       locale: 'zh',
-    //     });
-    //   });
-    // },
   },
 });
