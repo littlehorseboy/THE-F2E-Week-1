@@ -127,7 +127,7 @@
 
           <edit-tasks v-for="(task, index) in sortedImpotantTasks" :key="task.taskId" :task="task"
             @edit-cancel="editCancel(task, originalSortedImpotantTasks[index])"
-            @edit-save="editSave(task)"
+            @edit-save="editSave(task, originalSortedImpotantTasks[index])"
             @edit-remove="editRemove"
             @done-change="doneChange" @important-change="importantChange"></edit-tasks>
 
@@ -233,8 +233,8 @@
           <!-- end 新增的詳細欄位 -->
 
           <edit-tasks v-for="(task, index) in inProgressTasks" :key="task.taskId" :task="task"
-            @edit-cancel="editCancel(task, originalSortedImpotantTasks[index])"
-            @edit-save="editSave(task)"
+            @edit-cancel="editCancel(task, originalInProgressTasks[index])"
+            @edit-save="editSave(task, originalInProgressTasks[index])"
             @edit-remove="editRemove"
             @done-change="doneChange" @important-change="importantChange"></edit-tasks>
 
@@ -339,8 +339,8 @@
           <!-- end 新增的詳細欄位 -->
 
           <edit-tasks v-for="(task, index) in completedTasks" :key="task.taskId" :task="task"
-            @edit-cancel="editCancel(task, originalSortedImpotantTasks[index])"
-            @edit-save="editSave(task)"
+            @edit-cancel="editCancel(task, originalCompletedTasks[index])"
+            @edit-save="editSave(task, originalCompletedTasks[index])"
             @edit-remove="editRemove"
             @done-change="doneChange" @important-change="importantChange"></edit-tasks>
 
