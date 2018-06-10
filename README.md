@@ -1,7 +1,5 @@
 # No1.todolist
 
----
-
 #### 外部資源:
 * Semantic UI
 * Flatpickr (Datetimepicker)
